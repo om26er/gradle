@@ -1,0 +1,42 @@
+name: gradle
+version: 'latest'
+version-script: cat $SNAPCRAFT_STAGE/version
+summary: Accelerate developer productivity
+description: |
+  From mobile apps to microservices, from small startups to big enterprises,
+  Gradle helps teams build, automate and deliver better software, faster.
+grade: stable
+confinement: strict
+
+parts:
+  gradle:
+    plugin: nil
+    override-build: |
+      snapcraftctl build
+      RELEASE_INFO=$(curl https://services.gradle.org/versions/current -s)
+      URL=$(echo $RELEASE_INFO | jq .downloadUrl -r)
+      VERSION=$(echo $RELEASE_INFO | jq .version -r)
+      echo $VERSION > $SNAPCRAFT_STAGE/version
+      wget $URL -O gradle.zip
+      mkdir -p "${SNAPCRAFT_PART_INSTALL}/opt"
+      unzip -q -d "${SNAPCRAFT_PART_INSTALL}/opt" gradle.zip
+      mv "${SNAPCRAFT_PART_INSTALL}/opt/gradle-${VERSION}" "${SNAPCRAFT_PART_INSTALL}/opt/gradle"
+      rm gradle.zip
+    build-packages:
+      - curl
+      - jq
+      - wget
+      - unzip
+    stage-packages:
+      - openjdk-8-jdk-headless
+
+apps:
+  gradle:
+    command: opt/gradle/bin/gradle
+    environment:
+      JAVA_HOME: ${SNAP}/usr/lib/jvm/java-8-openjdk-amd64
+      GRADLE_USER_HOME: ${SNAP_USER_DATA}
+    plugs:
+      - network
+      - network-bind
+      - home
