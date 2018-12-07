@@ -1,4 +1,4 @@
-name: gradle
+name: om26er-gradle
 version: 'latest'
 version-script: cat $SNAPCRAFT_STAGE/version
 summary: Accelerate developer productivity
@@ -35,7 +35,7 @@ parts:
       - openjdk-8-jdk-headless
 
 apps:
-  gradle:
+  om26er-gradle:
     command: opt/gradle/bin/gradle
     environment:
       JAVA_HOME: ${SNAP}/usr/lib/jvm/java-8-openjdk-amd64
