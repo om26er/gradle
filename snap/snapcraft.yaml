@@ -1,4 +1,4 @@
-name: om26er-gradle
+name: gradle
 version: 'latest'
 version-script: cat $SNAPCRAFT_STAGE/version
 summary: Accelerate developer productivity
@@ -6,7 +6,7 @@ description: |
   From mobile apps to microservices, from small startups to big enterprises,
   Gradle helps teams build, automate and deliver better software, faster.
 grade: stable
-confinement: strict
+confinement: classic
 
 parts:
   gradle:
@@ -35,12 +35,7 @@ parts:
       - openjdk-8-jdk-headless
 
 apps:
-  om26er-gradle:
+  gradle:
     command: opt/gradle/bin/gradle
     environment:
       JAVA_HOME: ${SNAP}/usr/lib/jvm/java-8-openjdk-amd64
-      GRADLE_USER_HOME: ${SNAP_USER_DATA}
-    plugs:
-      - network
-      - network-bind
-      - home
